@@ -31,18 +31,18 @@ const ButtomBar = () => {
   return (
     <View style={styles.barBasic}>
       <View style={styles.tabPosition}>
-        <IconTab icon={require('../../Images/index-icon.png')} text="首页" />
-        <IconTab icon={require('../../Images/bills-icon.png')} text="账单" />
+        <IconTab icon={require('../../images/index-icon.png')} text="首页" />
+        <IconTab icon={require('../../images/bills-icon.png')} text="账单" />
       </View>
       <View style={styles.addPosition}>
         <AddButton />
       </View>
       <View style={styles.tabPosition}>
         <IconTab
-          icon={require('../../Images/statistic-icon.png')}
+          icon={require('../../images/statistic-icon.png')}
           text="统计"
         />
-        <IconTab icon={require('../../Images/option-icon.png')} text="我的" />
+        <IconTab icon={require('../../images/option-icon.png')} text="我的" />
       </View>
     </View>
   );

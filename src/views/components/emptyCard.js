@@ -51,7 +51,15 @@ const EmptyCard = () => {
   return (
     <View style={cardStyles.cardBasic}>
       <View style={{width: '100%', height: 40, flexDirection: 'row'}}>
-        <Image source={require('../../Images/laba.png')} />
+        <View
+          style={{
+            minWidth: 60,
+            minHeight: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Image source={require('../../images/laba.png')} />
+        </View>
         <Text style={cardStyles.textStyle}>当前还没有记录哦</Text>
       </View>
       <View

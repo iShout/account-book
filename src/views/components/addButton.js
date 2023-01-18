@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import LinePlus from '../../Images/line-plus.png';
+import LinePlus from '../../images/line-plus.png';
 
 const styles = StyleSheet.create({
   addBotton: {

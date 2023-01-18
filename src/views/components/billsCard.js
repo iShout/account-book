@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text, FlatList} from 'react-native';
 
+import iconList from '../../iconList';
+
 const Dot = () => {
   return (
     <View
@@ -45,6 +47,11 @@ const BillsList = props => {
   );
 };
 
+const randomPick = array => {
+  const random = Math.floor(Math.random() * array.length);
+  return array[random];
+};
+
 const BillsCard = props => {
   const {time, details} = props;
   const renderListItem = ({item}) => <BillsList {...item} />;
@@ -69,13 +76,26 @@ const BillsCard = props => {
           flexDirection: 'row',
           marginBottom: 24,
         }}>
-        <Image source={require('../../Images/smile-dialog.png')} />
+        <View
+          style={{
+            minWidth: 60,
+            minHeight: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Image
+            source={randomPick(iconList)}
+            style={{width: 48}}
+            resizeMode="contain"
+          />
+        </View>
         <View style={{marginLeft: 16}}>
           <Text
             style={{
-              fontSize: 20,
-              lineHeight: 40,
+              fontSize: 22,
+              lineHeight: 48,
               color: '#2e2e2e',
+              fontWeight: '600',
             }}>
             1月16日<Text style={{fontSize: 12}}>2023年</Text>
           </Text>

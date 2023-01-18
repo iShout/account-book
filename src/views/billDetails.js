@@ -14,7 +14,12 @@ const BillDetails = () => {
   return (
     <View>
       {JSON.stringify(billsData) === '[]' || !billsData[0] ? (
-        <EmptyCard />
+        <View>
+          <View style={{marginBottom: 24}}>
+            <Welcome />
+          </View>
+          <EmptyCard />
+        </View>
       ) : (
         <FlatList
           data={billsData}

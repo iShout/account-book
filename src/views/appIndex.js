@@ -23,8 +23,6 @@ const AppIndex = ({navigation}) => {
         style={{
           flex: 1,
           padding: 16,
-          justifyContent: 'center',
-          alignItems: 'center',
         }}>
         <BillDetails />
       </View>

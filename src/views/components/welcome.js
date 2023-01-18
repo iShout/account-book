@@ -16,7 +16,7 @@ const welcomeStyles = StyleSheet.create({
 const Welcome = () => {
   return (
     <View style={welcomeStyles.welcomeLayout}>
-      <Image source={require('../../Images/sunny.png')} />
+      <Image source={require('../../images/sunny.png')} />
       <Text style={welcomeStyles.welcomeText}>记个账呗</Text>
     </View>
   );
