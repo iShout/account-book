@@ -38,46 +38,54 @@ const CategoriesCard = props => {
 };
 //category的图标
 const CategoryIcon = props => {
+  const {tapOpt} = props;
   const {
     icon = require('../images/categoryIcons/construction.png'),
     label = 'cafe',
   } = props;
   const themeColor = randomPickArray(categoryColors);
+  const setKeyboardVisibility = useContext(addBillToggle);
   return (
-    <View style={styles.categoryIconStyle}>
-      <View
-        style={{
-          width: 60,
-          height: 60,
-          borderRadius: 30,
-          backgroundColor: `${themeColor}`,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Image
-          source={icon}
-          style={{width: 28, height: 28}}
-          resizeMode="contain"
-        />
-      </View>
-      <View
-        style={{
-          width: 60,
-          height: 18,
-          borderRadius: 9,
-          backgroundColor: `${themeColor}`,
-        }}>
-        <Text
+    <TouchableOpacity
+      onPress={() => {
+        setKeyboardVisibility(true);
+        tapOpt(label);
+      }}>
+      <View style={styles.categoryIconStyle}>
+        <View
           style={{
-            textAlign: 'center',
-            lineHeight: 18,
-            color: '#000',
-            fontSize: 12,
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            backgroundColor: `${themeColor}`,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          {label}
-        </Text>
+          <Image
+            source={icon}
+            style={{width: 28, height: 28}}
+            resizeMode="contain"
+          />
+        </View>
+        <View
+          style={{
+            width: 60,
+            height: 18,
+            borderRadius: 9,
+            backgroundColor: `${themeColor}`,
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              lineHeight: 18,
+              color: '#000',
+              fontSize: 12,
+            }}>
+            {label}
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -85,6 +93,26 @@ const CategoryIcon = props => {
 const BillKeyboard = props => {
   const {type = '购物'} = props;
   const setKeyboardVisibility = useContext(addBillToggle);
+  const [kbNumbers, setKbNumbers] = useState('0');
+  const updateKbNumbers = (label, isBackBtn = false) => {
+    if (isBackBtn) {
+      if (kbNumbers === '0') {
+        return;
+      } else {
+        const backNumsArr = kbNumbers.split('');
+        backNumsArr.pop();
+        const backNums =
+          JSON.stringify(backNumsArr) === '[]' ? '0' : backNumsArr.join('');
+        setKbNumbers(backNums);
+      }
+    } else {
+      if (kbNumbers === '0') {
+        setKbNumbers(label);
+      } else {
+        setKbNumbers(kbNumbers + label);
+      }
+    }
+  };
   const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   const specialLetters = ['<-', '.', '0'];
   return (
@@ -101,7 +129,7 @@ const BillKeyboard = props => {
           {type}
         </Text>
       </View>
-      <KeyboardInput />
+      <KeyboardInput amount={kbNumbers} />
       <View
         style={{
           width: '100%',
@@ -124,7 +152,11 @@ const BillKeyboard = props => {
                 justifyContent: 'space-around',
               }}>
               {row.map(row => (
-                <KeyboardBtn label={row} style={{width: '33.3%'}} />
+                <KeyboardBtn
+                  label={row}
+                  style={{width: '33.3%'}}
+                  pressBtn={updateKbNumbers}
+                />
               ))}
             </View>
           ))}
@@ -137,7 +169,7 @@ const BillKeyboard = props => {
             alignItems: 'center',
           }}>
           {specialLetters.map(letter => (
-            <KeyboardBtn label={letter} />
+            <KeyboardBtn label={letter} pressBtn={updateKbNumbers} />
           ))}
         </View>
       </View>
@@ -154,30 +186,36 @@ const BillKeyboard = props => {
 };
 //键盘按钮
 const KeyboardBtn = props => {
-  const {label = '1', btnWidth = 48} = props;
+  const {label = '1', btnWidth = 48, pressBtn = () => {}} = props;
   return (
-    <View
-      style={{
-        width: btnWidth,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: '#73B0CD',
+    <TouchableOpacity
+      onPress={() => {
+        pressBtn(label, label === '<-');
       }}>
-      <Text
+      <View
         style={{
-          lineHeight: 48,
-          textAlign: 'center',
-          color: '#000',
-          fontSize: 20,
-          fontFamily: 'ZiZhiQuXiMaiTi',
+          width: btnWidth,
+          height: 48,
+          borderRadius: 24,
+          backgroundColor: '#73B0CD',
         }}>
-        {label}
-      </Text>
-    </View>
+        <Text
+          style={{
+            lineHeight: 48,
+            textAlign: 'center',
+            color: '#000',
+            fontSize: 20,
+            fontFamily: 'ZiZhiQuXiMaiTi',
+          }}>
+          {label}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 // 键盘输入框
 const KeyboardInput = props => {
+  const {amount} = props;
   return (
     <View
       style={{
@@ -200,7 +238,7 @@ const KeyboardInput = props => {
           fontFamily: 'ZiZhiQuXiMaiTi',
           lineHeight: 40,
         }}>
-        ¥{998766}
+        ¥{amount.toLocaleString()}
       </Text>
     </View>
   );
@@ -209,6 +247,7 @@ const KeyboardInput = props => {
 //添加账单的主页面
 const AddBills = () => {
   const [showKeyboard, setKeyboardVisibility] = useState(false);
+  const [keyboardLabel, setKbLabel] = useState('');
   return (
     <addBillToggle.Provider value={setKeyboardVisibility}>
       <View style={{flex: 1, paddingTop: 32}}>
@@ -237,21 +276,14 @@ const AddBills = () => {
                 }}>
                 {row.map(category => (
                   <View style={{width: '33.3%', alignItems: 'center'}}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setKeyboardVisibility(true);
-                      }}>
-                      <CategoryIcon {...category} />
-                    </TouchableOpacity>
+                    <CategoryIcon {...category} tapOpt={setKbLabel} />
                   </View>
                 ))}
               </View>
             ))}
           </CategoriesCard>
         </View>
-        {showKeyboard && (
-          <BillKeyboard setKeyboardVisibility={setKeyboardVisibility} />
-        )}
+        {showKeyboard && <BillKeyboard type={keyboardLabel} />}
       </View>
     </addBillToggle.Provider>
   );
