@@ -1,9 +1,9 @@
-import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import React, {createContext} from 'react';
+import {View, StyleSheet} from 'react-native';
 
 import ButtomBar from './components/buttomBar';
 import BillDetails from './billDetails';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import AppContext from '../appContext';
 
 const styles = StyleSheet.create({
   barStyle: {
@@ -19,16 +19,18 @@ const styles = StyleSheet.create({
 const AppIndex = ({navigation}) => {
   return (
     <View style={{flex: 1, paddingTop: 32}}>
-      <View
-        style={{
-          flex: 1,
-          padding: 16,
-        }}>
-        <BillDetails />
-      </View>
-      <View style={styles.barStyle}>
-        <ButtomBar />
-      </View>
+      <AppContext.Provider value={navigation}>
+        <View
+          style={{
+            flex: 1,
+            padding: 16,
+          }}>
+          <BillDetails />
+        </View>
+        <View style={styles.barStyle}>
+          <ButtomBar />
+        </View>
+      </AppContext.Provider>
     </View>
   );
 };

@@ -1,8 +1,9 @@
-import React from 'react';
-import {View, StyleSheet, Text, Button} from 'react-native';
+import React, {useContext} from 'react';
+import {View, StyleSheet, Text, Button, TouchableOpacity} from 'react-native';
 
 import AddButton from './addButton.js';
 import IconTab from './iconTab.js';
+import AppContext from '../../appContext.js';
 
 const styles = StyleSheet.create({
   barBasic: {
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
 });
 
 const ButtomBar = () => {
+  const navi = useContext(AppContext);
   return (
     <View style={styles.barBasic}>
       <View style={styles.tabPosition}>
@@ -35,7 +37,12 @@ const ButtomBar = () => {
         <IconTab icon={require('../../images/bills-icon.png')} text="账单" />
       </View>
       <View style={styles.addPosition}>
-        <AddButton />
+        <TouchableOpacity
+          onPress={() => {
+            navi.navigate('AddBills');
+          }}>
+          <AddButton />
+        </TouchableOpacity>
       </View>
       <View style={styles.tabPosition}>
         <IconTab

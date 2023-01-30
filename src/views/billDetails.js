@@ -5,6 +5,7 @@ import billsData from '../mock/billsData';
 import Welcome from './components/welcome';
 import EmptyCard from './components/emptyCard';
 import BillsCard from './components/billsCard';
+
 const BillDetails = () => {
   const flatRenderCard = ({item}) => (
     <View style={{marginBottom: 28}}>

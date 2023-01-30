@@ -10,6 +10,7 @@ const welcomeStyles = StyleSheet.create({
     fontWeight: '500',
     marginLeft: 24,
     lineHeight: 75,
+    fontFamily: 'ZiZhiQuXiMaiTi',
   },
 });
 
