@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet, FlatList} from 'react-native';
-import billsData from '../mock/billsData';
 
 import Welcome from './components/welcome';
 import EmptyCard from './components/emptyCard';
 import BillsCard from './components/billsCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BillDetails = () => {
   const flatRenderCard = ({item}) => (
@@ -12,6 +12,12 @@ const BillDetails = () => {
       <BillsCard {...item} />
     </View>
   );
+  const [billsData, setBillsData] = useState([]);
+  useEffect(() => {
+    AsyncStorage.getItem('BillDetails').then(res => {
+      setBillsData(res !== null ? JSON.parse(res) : []);
+    });
+  }, []);
   return (
     <View>
       {JSON.stringify(billsData) === '[]' || !billsData[0] ? (

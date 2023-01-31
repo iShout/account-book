@@ -1,5 +1,6 @@
-import React from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
+import React, {useContext} from 'react';
+import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import AppContext from '../../appContext';
 
 const cardStyles = StyleSheet.create({
   // 卡片基本样式
@@ -41,10 +42,16 @@ const cardStyles = StyleSheet.create({
 });
 
 const MakeBillButton = () => {
+  const navi = useContext(AppContext);
   return (
-    <View style={cardStyles.billButtonStyle}>
-      <Text style={{color: '#fff', textAlign: 'center'}}>立即记账</Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        navi.navigate('AddBills');
+      }}>
+      <View style={cardStyles.billButtonStyle}>
+        <Text style={{color: '#fff', textAlign: 'center'}}>立即记账</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 const EmptyCard = () => {

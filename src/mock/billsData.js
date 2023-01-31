@@ -47,4 +47,4 @@ const mockdata = [
 
 const emptydata = [];
 
-export default mockdata;
+export default emptydata;

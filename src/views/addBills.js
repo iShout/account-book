@@ -1,4 +1,4 @@
-import React, {useState, useContext, createContext} from 'react';
+import React, {useState, useContext, createContext, useEffect} from 'react';
 import {
   Text,
   View,
@@ -9,31 +9,37 @@ import {
 } from 'react-native';
 import categoryColors from '../categoryColors.js';
 import {randomPickArray} from '../toolFunctions/toolFunctions';
-import {incomeIcons, disburseIcons} from '../categoryIcons.js';
+import * as icons from '../categoryIcons.js';
 import lodash from 'lodash';
 import addBillToggle from '../appContext';
+import {verifyExistDate, saveBillToCache} from '../toolFunctions/toolFunctions';
 
 // 支出，收入按钮
 const TypeButton = props => {
-  const {isTapped = false, btnText} = props;
+  const {isTapped = false, btnText, setBillType, btnType} = props;
   return (
-    <View style={styles.typeButtonStyle}>
-      {isTapped && <View style={styles.typeButtonTappedStyle} />}
-      <Text
-        style={{
-          fontSize: 18,
-          lineHeight: 36,
-          color: '#fff',
-          textAlign: 'center',
-        }}>
-        {btnText}
-      </Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        setBillType(btnType);
+      }}>
+      <View style={styles.typeButtonStyle}>
+        {isTapped && <View style={styles.typeButtonTappedStyle} />}
+        <Text
+          style={{
+            fontSize: 18,
+            lineHeight: 36,
+            color: '#fff',
+            textAlign: 'center',
+          }}>
+          {btnText}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 // categories的卡片
 const CategoriesCard = props => {
-  const {categoryList, children} = props;
+  const {children} = props;
   return <View style={styles.categoriesCardStyle}>{children}</View>;
 };
 //category的图标
@@ -91,9 +97,10 @@ const CategoryIcon = props => {
 
 //添加账单的键盘
 const BillKeyboard = props => {
-  const {type = '购物'} = props;
+  const {type = '购物', billType, navigation} = props;
   const setKeyboardVisibility = useContext(addBillToggle);
   const [kbNumbers, setKbNumbers] = useState('0');
+  const [billNote, setNote] = useState('');
   const updateKbNumbers = (label, isBackBtn = false) => {
     if (isBackBtn) {
       if (kbNumbers === '0') {
@@ -113,6 +120,29 @@ const BillKeyboard = props => {
       }
     }
   };
+  // 按下ok键对数据进行保存
+  const saveBillData = () => {
+    const date = new Date();
+    const month =
+      date.getMonth() + 1 > 9
+        ? (date.getMonth() + 1).toString()
+        : '0' + (date.getMonth() + 1).toString();
+    const time =
+      date.getFullYear().toString() + month + date.getDate().toString();
+    const group = type;
+    const amount = kbNumbers;
+    const note = billNote;
+    const timeStamp = date.getTime();
+    // const res = {time, group, amount, note};
+    const res = {time, group, amount, note, billType, timeStamp};
+    saveBillToCache(res)
+      .then(result => {
+        navigation.navigate('Index');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   const specialLetters = ['<-', '.', '0'];
   return (
@@ -129,7 +159,7 @@ const BillKeyboard = props => {
           {type}
         </Text>
       </View>
-      <KeyboardInput amount={kbNumbers} />
+      <KeyboardInput amount={kbNumbers} setNote={setNote} />
       <View
         style={{
           width: '100%',
@@ -144,8 +174,9 @@ const BillKeyboard = props => {
             height: '100%',
             justifyContent: 'space-between',
           }}>
-          {lodash.chunk(numbers, 3).map(row => (
+          {lodash.chunk(numbers, 3).map((row, index) => (
             <View
+              key={index}
               style={{
                 width: '100%',
                 flexDirection: 'row',
@@ -153,6 +184,7 @@ const BillKeyboard = props => {
               }}>
               {row.map(row => (
                 <KeyboardBtn
+                  key={row}
                   label={row}
                   style={{width: '33.3%'}}
                   pressBtn={updateKbNumbers}
@@ -169,7 +201,11 @@ const BillKeyboard = props => {
             alignItems: 'center',
           }}>
           {specialLetters.map(letter => (
-            <KeyboardBtn label={letter} pressBtn={updateKbNumbers} />
+            <KeyboardBtn
+              label={letter}
+              pressBtn={updateKbNumbers}
+              key={letter}
+            />
           ))}
         </View>
       </View>
@@ -178,7 +214,7 @@ const BillKeyboard = props => {
           setKeyboardVisibility(false);
         }}>
         <View style={{width: '100%', height: 62, alignItems: 'center'}}>
-          <KeyboardBtn label="OK" btnWidth={90} />
+          <KeyboardBtn label="OK" btnWidth={90} pressBtn={saveBillData} />
         </View>
       </TouchableOpacity>
     </View>
@@ -215,7 +251,7 @@ const KeyboardBtn = props => {
 };
 // 键盘输入框
 const KeyboardInput = props => {
-  const {amount} = props;
+  const {amount, setNote} = props;
   return (
     <View
       style={{
@@ -231,6 +267,9 @@ const KeyboardInput = props => {
       <TextInput
         style={{width: '70%', height: '100%'}}
         placeholder="请在这里输入备注"
+        onChangeText={text => {
+          setNote(text);
+        }}
       />
       <Text
         style={{
@@ -245,9 +284,14 @@ const KeyboardInput = props => {
 };
 
 //添加账单的主页面
-const AddBills = () => {
+const AddBills = ({navigation}) => {
   const [showKeyboard, setKeyboardVisibility] = useState(false);
   const [keyboardLabel, setKbLabel] = useState('');
+  const [billType, setBillType] = useState('disburse');
+  const billTypeMap = new Map([
+    ['disburse', '支出'],
+    ['income', '收入'],
+  ]);
   return (
     <addBillToggle.Provider value={setKeyboardVisibility}>
       <View style={{flex: 1, paddingTop: 32}}>
@@ -259,23 +303,29 @@ const AddBills = () => {
               justifyContent: 'space-around',
               marginBottom: 46,
             }}>
-            {['支出', '收入'].map((item, index) => (
+            {['disburse', 'income'].map((item, index) => (
               <TypeButton
-                btnText={item}
-                isTapped={index === 0 ? true : false}
+                key={item}
+                btnText={billTypeMap.get(item)}
+                btnType={item}
+                isTapped={billType === item ? true : false}
+                setBillType={setBillType}
               />
             ))}
           </View>
           <CategoriesCard>
-            {lodash.chunk(disburseIcons, 3).map(row => (
+            {lodash.chunk(icons[`${billType}Icons`], 3).map((row, index) => (
               <View
+                key={index}
                 style={{
                   width: '100%',
                   flexDirection: 'row',
                   marginBottom: 20,
                 }}>
-                {row.map(category => (
-                  <View style={{width: '33.3%', alignItems: 'center'}}>
+                {row.map((category, index) => (
+                  <View
+                    style={{width: '33.3%', alignItems: 'center'}}
+                    key={index}>
                     <CategoryIcon {...category} tapOpt={setKbLabel} />
                   </View>
                 ))}
@@ -283,7 +333,13 @@ const AddBills = () => {
             ))}
           </CategoriesCard>
         </View>
-        {showKeyboard && <BillKeyboard type={keyboardLabel} />}
+        {showKeyboard && (
+          <BillKeyboard
+            type={keyboardLabel}
+            billType={billType}
+            navigation={navigation}
+          />
+        )}
       </View>
     </addBillToggle.Provider>
   );

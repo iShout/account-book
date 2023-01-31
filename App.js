@@ -16,7 +16,7 @@ const App = () => {
         },
       }}>
       <Stack.Navigator
-        initialRouteName="AddBills"
+        initialRouteName="Index"
         screenOptions={{
           headerShown: false,
         }}>

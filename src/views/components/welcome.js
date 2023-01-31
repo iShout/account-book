@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, StyleSheet, Text, Image} from 'react-native';
+import {View, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const welcomeStyles = StyleSheet.create({
   welcomeLayout: {
@@ -16,10 +17,17 @@ const welcomeStyles = StyleSheet.create({
 
 const Welcome = () => {
   return (
-    <View style={welcomeStyles.welcomeLayout}>
-      <Image source={require('../../images/sunny.png')} />
-      <Text style={welcomeStyles.welcomeText}>记个账呗</Text>
-    </View>
+    <TouchableOpacity
+      onPress={async () => {
+        await AsyncStorage.removeItem('BillDetails').then(() => {
+          console.error('全部数据已删除');
+        });
+      }}>
+      <View style={welcomeStyles.welcomeLayout}>
+        <Image source={require('../../images/sunny.png')} />
+        <Text style={welcomeStyles.welcomeText}>记个账呗</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 export default Welcome;

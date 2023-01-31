@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text, FlatList} from 'react-native';
+import {analyseTimeString} from '../../toolFunctions/toolFunctions';
 
 import iconList from '../../iconList';
 
@@ -26,7 +27,7 @@ const More = () => {
         alignItems: 'center',
       }}>
       {[1, 2, 3].map(index => (
-        <Dot />
+        <Dot key={index} />
       ))}
     </View>
   );
@@ -54,6 +55,7 @@ const randomPick = array => {
 
 const BillsCard = props => {
   const {time, details} = props;
+  const timeObj = analyseTimeString(time);
   const renderListItem = ({item}) => <BillsList {...item} />;
   return (
     <View style={cardStyles.cardBasic}>
@@ -97,7 +99,8 @@ const BillsCard = props => {
               color: '#2e2e2e',
               fontWeight: '600',
             }}>
-            1月16日<Text style={{fontSize: 12}}>2023年</Text>
+            {timeObj.month}月{timeObj.days}日
+            <Text style={{fontSize: 12}}>{timeObj.year}年</Text>
           </Text>
         </View>
       </View>
