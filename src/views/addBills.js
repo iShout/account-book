@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  DeviceEventEmitter,
 } from 'react-native';
 import categoryColors from '../categoryColors.js';
 import {randomPickArray} from '../toolFunctions/toolFunctions';
@@ -137,7 +138,8 @@ const BillKeyboard = props => {
     const res = {time, group, amount, note, billType, timeStamp};
     saveBillToCache(res)
       .then(result => {
-        navigation.navigate('Index');
+        DeviceEventEmitter.emit('addDone', 'done');
+        navigation.popToTop();
       })
       .catch(error => {
         console.error(error);

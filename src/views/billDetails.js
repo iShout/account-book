@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, StyleSheet, FlatList} from 'react-native';
+import {View, FlatList, DeviceEventEmitter} from 'react-native';
 
 import Welcome from './components/welcome';
 import EmptyCard from './components/emptyCard';
@@ -18,6 +18,20 @@ const BillDetails = () => {
       setBillsData(res !== null ? JSON.parse(res) : []);
     });
   }, []);
+  useEffect(() => {
+    const navigationListener = DeviceEventEmitter.addListener(
+      'addDone',
+      async e => {
+        await AsyncStorage.getItem('BillDetails').then(res => {
+          console.log(res, 'rrs');
+          setBillsData(res !== null ? JSON.parse(res) : []);
+        });
+      },
+    );
+    return () => {
+      navigationListener.remove();
+    };
+  });
   return (
     <View>
       {JSON.stringify(billsData) === '[]' || !billsData[0] ? (
