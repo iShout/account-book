@@ -22,7 +22,7 @@ const setStorageItem = async (data, time) => {
 };
 const saveBillToCache = async bill => {
   //验证本地存储中，当前时间下是否存在数据。不存在直接上传，存在的话push进已存在的数据
-  verifyExistDate(bill.time).then(res => {
+  return verifyExistDate(bill.time).then(res => {
     if (res) {
       res.details.push(bill);
       setStorageItem(res, bill.time);

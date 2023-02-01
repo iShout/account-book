@@ -14,6 +14,7 @@ import * as icons from '../categoryIcons.js';
 import lodash from 'lodash';
 import addBillToggle from '../appContext';
 import {verifyExistDate, saveBillToCache} from '../toolFunctions/toolFunctions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 支出，收入按钮
 const TypeButton = props => {
@@ -136,14 +137,13 @@ const BillKeyboard = props => {
     const timeStamp = date.getTime();
     // const res = {time, group, amount, note};
     const res = {time, group, amount, note, billType, timeStamp};
-    saveBillToCache(res)
-      .then(result => {
+    saveBillToCache(res).then(async result => {
+      await AsyncStorage.getItem('BillDetails').then(val => {
+        console.log(val, 'getting value');
         DeviceEventEmitter.emit('addDone', 'done');
         navigation.popToTop();
-      })
-      .catch(error => {
-        console.error(error);
       });
+    });
   };
   const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   const specialLetters = ['<-', '.', '0'];
