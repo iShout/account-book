@@ -4,5 +4,6 @@
 * react native element --项目ui框架
 * AsyncStorage --项目数据本地存储
 ## 项目截图
-主页
-<img src='./readmeImage/screen-index.png' width='50%' height="50%">
+<img src='./readmeImage/screen-index.png' width='40%' height="40%">
+<img src='./readmeImage/add-income.png' width='40%' height="40%">
+<img src='./readmeImage/add-disburse.png' width='40%' height="40%">
