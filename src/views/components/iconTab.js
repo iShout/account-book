@@ -1,6 +1,22 @@
-import React from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
+import React, {useContext} from 'react';
+import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import PageContext from '../../appContext';
 
+const IconTab = props => {
+  const {text, icon, targetPage = 'TodayBill', navigation} = props;
+  const setPage = useContext(PageContext);
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate(targetPage);
+      }}>
+      <View style={tabStyles.tabContainer}>
+        <Image source={icon} style={tabStyles.iconStyle} />
+        <Text style={tabStyles.textStyle}>{text}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 const tabStyles = StyleSheet.create({
   tabContainer: {
     width: 48,
@@ -16,15 +32,5 @@ const tabStyles = StyleSheet.create({
     height: 36,
   },
 });
-
-const IconTab = props => {
-  const {text, icon} = props;
-  return (
-    <View style={tabStyles.tabContainer}>
-      <Image source={icon} style={tabStyles.iconStyle} />
-      <Text style={tabStyles.textStyle}>{text}</Text>
-    </View>
-  );
-};
 
 export default IconTab;

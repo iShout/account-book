@@ -67,7 +67,7 @@ const EmptyCard = () => {
           }}>
           <Image source={require('../../images/laba.png')} />
         </View>
-        <Text style={cardStyles.textStyle}>当前还没有记录哦</Text>
+        <Text style={cardStyles.textStyle}>今天还没有记账哦</Text>
       </View>
       <View
         style={{

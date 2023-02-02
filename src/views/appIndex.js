@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import ButtomBar from './components/buttomBar';
 import BillDetails from './billDetails';
+import TodayBill from './todayBill';
 import AppContext from '../appContext';
 
 const styles = StyleSheet.create({
@@ -15,7 +17,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
+const BottomTab = createBottomTabNavigator();
+//底部自定义导航
+const BottomNavigator = () => {
+  return (
+    <BottomTab.Navigator
+      tabBar={props => <ButtomBar {...props} />}
+      initialRouteName="Index"
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <BottomTab.Screen name="TodayBill" component={TodayBill} />
+      <BottomTab.Screen name="BillDetails" component={BillDetails} />
+    </BottomTab.Navigator>
+  );
+};
 const AppIndex = ({navigation}) => {
   return (
     <View style={{flex: 1, paddingTop: 32}}>
@@ -25,11 +41,10 @@ const AppIndex = ({navigation}) => {
             flex: 1,
             padding: 16,
           }}>
-          <BillDetails />
+          <BottomNavigator />
         </View>
-        <View style={styles.barStyle}>
-          <ButtomBar />
-        </View>
+        {/* <View style={styles.barStyle}>
+        </View> */}
       </AppContext.Provider>
     </View>
   );

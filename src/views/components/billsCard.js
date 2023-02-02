@@ -55,6 +55,11 @@ const randomPick = array => {
 
 const BillsCard = props => {
   const {time, details} = props;
+  const disburseDetail = details.filter(bill => bill.billType === 'disburse');
+  const totalDisburse = disburseDetail.reduce(
+    (pre, cur) => (pre.amount || pre) + cur.amount,
+    0,
+  );
   const timeObj = analyseTimeString(time);
   const renderListItem = ({item}) => <BillsList {...item} />;
   return (
@@ -109,7 +114,7 @@ const BillsCard = props => {
       </View>
       {/* 结余角标,pos:absolute */}
       <View style={{position: 'absolute', bottom: 16, right: 24}}>
-        <Text style={{color: '#c2c2c2'}}>结余: 888元</Text>
+        <Text style={{color: '#c2c2c2'}}>支出总计: {totalDisburse}元</Text>
       </View>
     </View>
   );

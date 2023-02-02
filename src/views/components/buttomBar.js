@@ -7,7 +7,7 @@ import AppContext from '../../appContext.js';
 
 const styles = StyleSheet.create({
   barBasic: {
-    width: '90%',
+    width: '100%',
     height: 50,
     backgroundColor: '#1890ff',
     borderRadius: 25,
@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingStart: 16,
     paddingEnd: 16,
+    bottom: 12,
   },
   addPosition: {
     bottom: 24,
@@ -28,13 +29,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const ButtomBar = () => {
+const ButtomBar = props => {
+  const {navigation, state} = props;
   const navi = useContext(AppContext);
   return (
     <View style={styles.barBasic}>
       <View style={styles.tabPosition}>
-        <IconTab icon={require('../../images/index-icon.png')} text="首页" />
-        <IconTab icon={require('../../images/bills-icon.png')} text="账单" />
+        <IconTab
+          icon={require('../../images/index-icon.png')}
+          text="首页"
+          targetPage="TodayBill"
+          navigation={navigation}
+        />
+        <IconTab
+          icon={require('../../images/bills-icon.png')}
+          text="账单"
+          targetPage="BillDetails"
+          navigation={navigation}
+        />
       </View>
       <View style={styles.addPosition}>
         <TouchableOpacity
@@ -48,8 +60,13 @@ const ButtomBar = () => {
         <IconTab
           icon={require('../../images/statistic-icon.png')}
           text="统计"
+          navigation={navigation}
         />
-        <IconTab icon={require('../../images/option-icon.png')} text="我的" />
+        <IconTab
+          icon={require('../../images/option-icon.png')}
+          text="我的"
+          navigation={navigation}
+        />
       </View>
     </View>
   );

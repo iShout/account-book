@@ -13,7 +13,7 @@ import {randomPickArray} from '../toolFunctions/toolFunctions';
 import * as icons from '../categoryIcons.js';
 import lodash from 'lodash';
 import addBillToggle from '../appContext';
-import {verifyExistDate, saveBillToCache} from '../toolFunctions/toolFunctions';
+import {saveBillToCache, getNowString} from '../toolFunctions/toolFunctions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 支出，收入按钮
@@ -125,14 +125,9 @@ const BillKeyboard = props => {
   // 按下ok键对数据进行保存
   const saveBillData = () => {
     const date = new Date();
-    const month =
-      date.getMonth() + 1 > 9
-        ? (date.getMonth() + 1).toString()
-        : '0' + (date.getMonth() + 1).toString();
-    const time =
-      date.getFullYear().toString() + month + date.getDate().toString();
+    const time = getNowString();
     const group = type;
-    const amount = kbNumbers;
+    const amount = Number(kbNumbers);
     const note = billNote;
     const timeStamp = date.getTime();
     // const res = {time, group, amount, note};
