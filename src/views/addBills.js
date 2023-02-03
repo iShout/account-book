@@ -135,6 +135,7 @@ const BillKeyboard = props => {
     saveBillToCache(res).then(result => {
       //在getItem之后跳转才能正确获取到数据【猜测可能是强行异步等待了？】
       AsyncStorage.getItem('BillDetails').then(val => {
+        console.log(val, 'valll');
         DeviceEventEmitter.emit('addDone', 'done');
         navigation.popToTop();
       });

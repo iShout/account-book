@@ -6,11 +6,16 @@ const setStorageItem = async (data, time) => {
   await AsyncStorage.getItem('BillDetails').then(async res => {
     if (res) {
       const resArr = JSON.parse(res);
+      let timeIsExist = false;
       resArr.forEach(item => {
         if (item.time === time) {
+          timeIsExist = true;
           item.details = JSON.parse(JSON.stringify(data.details));
         }
       });
+      if (!timeIsExist) {
+        resArr.unshift(data);
+      }
       return await AsyncStorage.setItem('BillDetails', JSON.stringify(resArr));
     } else {
       const newBill = [];
