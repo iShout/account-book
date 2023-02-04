@@ -1,9 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import verifyExistDate from './verifyExistDate';
 
-const setStorageItem = async (data, time) => {
+/**
+ * @param {object} data 账单详情
+ * @param {string} time 存入的账单数据时间
+ * @param {string} storageName 存入的存储库名称
+ */
+const setStorageItem = async (data, time, storageName = 'BillDetails') => {
   // 获取本地存储中的所有数据,如果没有数据就直接上传，有数据合并后再上传
-  await AsyncStorage.getItem('BillDetails').then(async res => {
+  await AsyncStorage.getItem(storageName).then(async res => {
     if (res) {
       const resArr = JSON.parse(res);
       let timeIsExist = false;
@@ -16,21 +21,26 @@ const setStorageItem = async (data, time) => {
       if (!timeIsExist) {
         resArr.unshift(data);
       }
-      return await AsyncStorage.setItem('BillDetails', JSON.stringify(resArr));
+      return await AsyncStorage.setItem(storageName, JSON.stringify(resArr));
     } else {
       const newBill = [];
       newBill.push(data);
       const jsonBill = JSON.stringify(newBill);
-      return await AsyncStorage.setItem('BillDetails', jsonBill);
+      return await AsyncStorage.setItem(storageName, jsonBill);
     }
   });
 };
-const saveBillToCache = async bill => {
+/**
+ * @param {object} bill 账单详情
+ * @param {string} storageName 存入的存储库名称
+ * @return {array | undefined} 验证账单所在的时间是否已存在账单数据
+ */
+const saveBillToCache = async (bill, storageName) => {
   //验证本地存储中，当前时间下是否存在数据。不存在直接上传，存在的话push进已存在的数据
-  return verifyExistDate(bill.time).then(res => {
+  return verifyExistDate(bill.time, storageName).then(res => {
     if (res) {
       res.details.push(bill);
-      setStorageItem(res, bill.time);
+      setStorageItem(res, bill.time, storageName);
     } else {
       const detail = [];
       detail.push(bill);
@@ -38,7 +48,7 @@ const saveBillToCache = async bill => {
         time: bill.time,
         details: detail,
       };
-      setStorageItem(template, bill.time);
+      setStorageItem(template, bill.time, storageName);
     }
   });
 };

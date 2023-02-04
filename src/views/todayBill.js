@@ -16,7 +16,7 @@ const BillDetails = () => {
   );
   const [billsData, setBillsData] = useState([]);
   useEffect(() => {
-    AsyncStorage.getItem('BillDetails').then(res => {
+    AsyncStorage.getItem(`Bill-${getNowString('month')}`).then(res => {
       let ObtainedBills = [];
       if (res !== null) {
         const resArray = JSON.parse(res);
@@ -29,12 +29,14 @@ const BillDetails = () => {
     const navigationListener = DeviceEventEmitter.addListener(
       'addDone',
       async e => {
-        await AsyncStorage.getItem('BillDetails').then(res => {
-          let ObtainedBills = [];
-          const resArray = JSON.parse(res);
-          ObtainedBills = resArray.filter(bill => bill.time === todayTime);
-          setBillsData(ObtainedBills);
-        });
+        await AsyncStorage.getItem(`Bill-${getNowString('month')}`).then(
+          res => {
+            let ObtainedBills = [];
+            const resArray = JSON.parse(res);
+            ObtainedBills = resArray.filter(bill => bill.time === todayTime);
+            setBillsData(ObtainedBills);
+          },
+        );
       },
     );
     return () => {

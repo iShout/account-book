@@ -131,11 +131,11 @@ const BillKeyboard = props => {
     const note = billNote;
     const timeStamp = date.getTime();
     // const res = {time, group, amount, note};
+    const storageName = `Bill-${getNowString('month')}`;
     const res = {time, group, amount, note, billType, timeStamp};
-    saveBillToCache(res).then(result => {
+    saveBillToCache(res, storageName).then(result => {
       //在getItem之后跳转才能正确获取到数据【猜测可能是强行异步等待了？】
-      AsyncStorage.getItem('BillDetails').then(val => {
-        console.log(val, 'valll');
+      AsyncStorage.getItem(storageName).then(val => {
         DeviceEventEmitter.emit('addDone', 'done');
         navigation.popToTop();
       });

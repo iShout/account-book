@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, createContext} from 'react';
 import {
   View,
   FlatList,
@@ -20,6 +20,36 @@ import {
 } from '../toolFunctions/toolFunctions';
 
 import TapBg from '../images/tap-bg.png';
+
+/**
+ * @param {object} bills 账单数据
+ * @param {strign} selectedDate 被选中的日期，格式'xxxx-xx-xx'
+ * @return {object} 用于标记日历的数据
+ */
+const calendarExtraInfo = (bills, selectedDate) => {
+  const markedDate = {};
+  bills.forEach(bill => {
+    const dashTime = numberToDash(bill.time);
+    const disburseArr = bill.details.filter(
+      billItem => billItem.billType === 'disburse',
+    );
+    const incomeArr = bill.details.filter(
+      billItem => billItem.billType === 'income',
+    );
+    const dotsArr = [];
+    if (disburseArr.length) {
+      dotsArr.push(disburse);
+    }
+    if (incomeArr.length) {
+      dotsArr.push(income);
+    }
+    markedDate[dashTime] = {dots: dotsArr};
+  });
+  markedDate[selectedDate] = Object.assign(markedDate[selectedDate] || {}, {
+    selected: true,
+  });
+  return markedDate;
+};
 
 const DisplayTypeSelector = props => {
   const {displayType, setBillType} = props;
@@ -72,23 +102,40 @@ const BillDetails = () => {
   );
   // 账单数据详情数据
   const [billsData, setBillsData] = useState([]);
+  // 选中日期的账单详情数据
+  const [selectedDateData, setSelectedData] = useState([]);
   // 账单详情type
   const [billDetailsType, setBillType] = useState('日历');
   //日历选中时间，默认今天
   const todayString = getNowString();
   const [selectedTime, setSelectedTime] = useState(numberToDash(todayString));
+  //查询的账单存储库名，默认本月
+  const [storageName, setStorageName] = useState(
+    `Bill-${getNowString('month')}`,
+  );
+  const DateContext = createContext();
+  //存储库名
   useEffect(() => {
-    AsyncStorage.getItem('BillDetails').then(res => {
-      console.log(res, 'reess');
+    AsyncStorage.getItem(storageName).then(res => {
       setBillsData(res !== null ? JSON.parse(res) : []);
+      setSelectedData(
+        JSON.parse(res).filter(
+          bill => bill.time === dashToNumber(selectedTime),
+        ),
+      );
     });
-  }, []);
+  }, [storageName, selectedTime]);
   useEffect(() => {
     const navigationListener = DeviceEventEmitter.addListener(
       'addDone',
       async e => {
-        await AsyncStorage.getItem('BillDetails').then(res => {
+        await AsyncStorage.getItem(storageName).then(res => {
           setBillsData(res !== null ? JSON.parse(res) : []);
+          setSelectedData(
+            JSON.parse(res).filter(
+              bill => bill.time === dashToNumber(selectedTime),
+            ),
+          );
         });
       },
     );
@@ -125,19 +172,30 @@ const BillDetails = () => {
           <View style={{width: '100%'}}>
             <Calendar
               onDayPress={day => {
-                console.log(day, 'daysss');
                 setSelectedTime(day.dateString);
               }}
               enableSwipeMonths={true}
               style={{marginBottom: 24, width: '100%'}}
               markingType={'multi-dot'}
-              markedDates={{
-                [selectedTime]: {selected: true, dots: [income, disburse]},
-              }}
-              // dayComponent={day => <Text>{day}</Text>}
+              markedDates={calendarExtraInfo(billsData, selectedTime)}
             />
           </View>
-          <EmptyCard />
+          <View>
+            {JSON.stringify(selectedDateData) === '[]' ||
+            !selectedDateData[0] ? (
+              <View>
+                <EmptyCard />
+              </View>
+            ) : (
+              <FlatList
+                data={selectedDateData}
+                renderItem={flatRenderCard}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                ListFooterComponent={<View style={{height: 60}} />}
+              />
+            )}
+          </View>
         </View>
       )}
     </View>

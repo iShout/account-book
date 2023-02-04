@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const verifyExistDate = async dateString => {
-  return await AsyncStorage.getItem('BillDetails').then(jsonRes => {
+const verifyExistDate = async (dateString, storageName) => {
+  return await AsyncStorage.getItem(storageName).then(jsonRes => {
     if (jsonRes === null) {
       return undefined;
     } else {
