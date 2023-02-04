@@ -42,7 +42,7 @@ const BillDetails = () => {
     };
   });
   return (
-    <View>
+    <View style={{flex: 1}}>
       {JSON.stringify(billsData) === '[]' || !billsData[0] ? (
         <View>
           <View style={{marginBottom: 24}}>

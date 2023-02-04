@@ -1,4 +1,4 @@
-const getNowString = () => {
+const getNowString = (level = 'day') => {
   const date = new Date();
   const month =
     date.getMonth() + 1 > 9
@@ -7,6 +7,15 @@ const getNowString = () => {
   const days =
     date.getDate() > 9 ? date.getDate().toString() : '0' + date.getDate();
   const time = date.getFullYear().toString() + month + days;
-  return time;
+  switch (level) {
+    case 'year':
+      return date.getFullYear().toString();
+    case 'month':
+      return date.getFullYear().toString() + month;
+    case 'day':
+      return time;
+    default:
+      break;
+  }
 };
 export default getNowString;

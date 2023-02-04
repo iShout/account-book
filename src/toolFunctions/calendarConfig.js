@@ -31,15 +31,20 @@ LocaleConfig.locales.CN = {
     '十二月',
   ],
   dayNames: [
+    '星期日',
     '星期一',
     '星期二',
     '星期三',
     '星期四',
     '星期五',
     '星期六',
-    '星期日',
   ],
-  dayNamesShort: ['一', '二', '三', '四', '五', '六', '日'],
+  dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
   today: '今日',
 };
 LocaleConfig.defaultLocale = 'CN';
+
+const disburse = {key: 'disburse', color: '#FF6347'};
+const income = {key: 'income', color: '#0FDA5D'};
+
+export {disburse, income};

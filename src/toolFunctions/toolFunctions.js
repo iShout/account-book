@@ -3,6 +3,8 @@ import verifyExistDate from './verifyExistDate';
 import saveBillToCache from './saveBillToCache';
 import analyseTimeString from './analyseTimeString';
 import getNowString from './getNowString';
+import numberToDash from './numberToDash';
+import dashToNumber from './dashToNumber';
 
 export {
   randomPickArray,
@@ -10,4 +12,6 @@ export {
   saveBillToCache,
   analyseTimeString,
   getNowString,
+  numberToDash,
+  dashToNumber,
 };
