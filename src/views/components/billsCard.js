@@ -41,8 +41,10 @@ const BillsList = props => {
         {group}-{note}
       </Text>
       <Text style={cardStyles.listItemText}>
-        {billType === 'income' ? '+' : '-'}
-        {amount}元
+        <Text style={{color: billType === 'income' ? '#0FDA5D' : '#FF6347'}}>
+          ¥{billType === 'income' ? '+' : '-'}
+          {amount.toLocaleString()}
+        </Text>
       </Text>
     </View>
   );

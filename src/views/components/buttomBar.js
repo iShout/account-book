@@ -60,11 +60,13 @@ const ButtomBar = props => {
         <IconTab
           icon={require('../../images/statistic-icon.png')}
           text="统计"
+          targetPage="StatisticPage"
           navigation={navigation}
         />
         <IconTab
           icon={require('../../images/option-icon.png')}
           text="我的"
+          targetPage="OptionPage"
           navigation={navigation}
         />
       </View>

@@ -5,6 +5,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import ButtomBar from './components/buttomBar';
 import BillDetails from './billDetails';
 import TodayBill from './todayBill';
+import StatisticPage from './statisticPage';
+import OptionPage from './optionPage';
 import AppContext from '../appContext';
 
 const styles = StyleSheet.create({
@@ -29,6 +31,8 @@ const BottomNavigator = () => {
       }}>
       <BottomTab.Screen name="TodayBill" component={TodayBill} />
       <BottomTab.Screen name="BillDetails" component={BillDetails} />
+      <BottomTab.Screen name="StatisticPage" component={StatisticPage} />
+      <BottomTab.Screen name="OptionPage" component={OptionPage} />
     </BottomTab.Navigator>
   );
 };
