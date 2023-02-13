@@ -25,7 +25,7 @@ const BottomNavigator = () => {
   return (
     <BottomTab.Navigator
       tabBar={props => <ButtomBar {...props} />}
-      initialRouteName="Index"
+      initialRouteName="OptionPage"
       screenOptions={{
         headerShown: false,
       }}>
