@@ -7,3 +7,4 @@
 ## 项目截图
 <img src='./readmeImage/screen-index.png' width='30%' height="30%">  <img src='./readmeImage/add-income.png' width='30%' height="30%">  <img src='./readmeImage/add-disburse.png' width='30%' height="30%">
 <img src='./readmeImage/details.png' width='30%' height="30%">  <img src='./readmeImage/details-calendar.png' width='30%' height="30%">  <img src='./readmeImage/details-calendar-past.png' width='30%' height="30%">
+<img src='./readmeImage/options.png' width='30%' height="30%"> 
