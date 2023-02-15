@@ -1,8 +1,12 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
-import {isHapticEnabled} from '../redux/features/haptic/hapticSlice';
+import {
+  isHapticEnabled,
+  hapticToTarget,
+} from '../redux/features/haptic/hapticSlice';
 
 import ButtomBar from './components/buttomBar';
 import BillDetails from './billDetails';
@@ -11,23 +15,13 @@ import StatisticPage from './statisticPage';
 import OptionPage from './optionPage';
 import AppContext from '../appContext';
 
-const styles = StyleSheet.create({
-  barStyle: {
-    width: '100%',
-    height: 50,
-    position: 'absolute',
-    bottom: 26,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 const BottomTab = createBottomTabNavigator();
 //底部自定义导航
 const BottomNavigator = () => {
   return (
     <BottomTab.Navigator
       tabBar={props => <ButtomBar {...props} />}
-      initialRouteName="OptionPage"
+      initialRouteName="TodayBill"
       screenOptions={{
         headerShown: false,
       }}>
@@ -39,6 +33,29 @@ const BottomNavigator = () => {
   );
 };
 const AppIndex = ({navigation}) => {
+  const hapticStatus = useSelector(isHapticEnabled);
+  const dispatch = useDispatch();
+  const getAppSetup = async () => {
+    return await AsyncStorage.getItem('GlobalOptions');
+  };
+  useEffect(() => {
+    getAppSetup().then(resJSON => {
+      const res = JSON.parse(resJSON);
+      if (res && res.hapticSetup !== undefined) {
+        dispatch(hapticToTarget(res.hapticSetup));
+      } else {
+        const hapticSetup = {
+          hapticSetup: hapticStatus,
+        };
+        res === null
+          ? AsyncStorage.setItem('GlobalOptions', JSON.stringify(hapticSetup))
+          : AsyncStorage.mergeItem(
+              'GlobalOptions',
+              JSON.stringify(hapticSetup),
+            );
+      }
+    });
+  }, []);
   return (
     <View style={{flex: 1, paddingTop: 32}}>
       <AppContext.Provider value={navigation}>
@@ -49,8 +66,6 @@ const AppIndex = ({navigation}) => {
           }}>
           <BottomNavigator />
         </View>
-        {/* <View style={styles.barStyle}>
-        </View> */}
       </AppContext.Provider>
     </View>
   );

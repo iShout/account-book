@@ -9,10 +9,13 @@ export const hapticSlice = createSlice({
     hapticToggle: state => {
       state.hapticEnable = !state.hapticEnable;
     },
+    hapticToTarget: (state, payload) => {
+      state.hapticEnable = payload.payload;
+    },
   },
 });
 
-export const {hapticToggle} = hapticSlice.actions;
+export const {hapticToggle, hapticToTarget} = hapticSlice.actions;
 export const isHapticEnabled = state => state.haptic.hapticEnable;
 
 export default hapticSlice.reducer;

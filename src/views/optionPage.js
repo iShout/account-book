@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Switch,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomCard from './components/customCard';
 import user from '../mock/userInfo';
 import {useSelector, useDispatch} from 'react-redux';
@@ -172,8 +173,14 @@ const OptionPage = () => {
       functionName: '震动',
       icon: require('../images/vibrate.png'),
       functionTarget: HapticEnabled,
-      functionToggle: () => {
-        dispatch(hapticToggle());
+      functionToggle: async () => {
+        const hapticStatus = {hapticSetup: !HapticEnabled};
+        AsyncStorage.mergeItem(
+          'GlobalOptions',
+          JSON.stringify(hapticStatus),
+        ).then(res => {
+          dispatch(hapticToggle());
+        });
       },
     },
   ];
