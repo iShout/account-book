@@ -18,6 +18,7 @@ import {
   numberToDash,
   dashToNumber,
 } from '../toolFunctions/toolFunctions';
+import HapticFeedbackView from './components/hapticFeedbackView';
 
 import TapBg from '../images/tap-bg.png';
 
@@ -65,7 +66,7 @@ const DisplayTypeSelector = props => {
         justifyContent: 'space-around',
       }}>
       {typeText.map(ele => (
-        <TouchableOpacity
+        <HapticFeedbackView
           key={ele}
           onPress={() => {
             setBillType(ele);
@@ -89,7 +90,7 @@ const DisplayTypeSelector = props => {
               />
             )}
           </View>
-        </TouchableOpacity>
+        </HapticFeedbackView>
       ))}
     </View>
   );

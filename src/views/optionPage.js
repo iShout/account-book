@@ -16,6 +16,7 @@ import {
   isHapticEnabled,
   hapticToggle,
 } from '../redux/features/haptic/hapticSlice';
+import HapticFeedbackView from './components/hapticFeedbackView';
 
 const Title = props => {
   const {titleText} = props;
@@ -99,14 +100,14 @@ const CommonFuntion = props => {
     },
   });
   return (
-    <TouchableOpacity>
+    <HapticFeedbackView>
       <View style={functionStyles.functionSize}>
         <View style={functionStyles.iconContainer}>
           <Image style={functionStyles.imageSize} source={icon} />
         </View>
         <Text style={functionStyles.textStyle}>{functionName}</Text>
       </View>
-    </TouchableOpacity>
+    </HapticFeedbackView>
   );
 };
 //其它组件的ui封装

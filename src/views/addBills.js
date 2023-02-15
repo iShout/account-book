@@ -15,12 +15,13 @@ import lodash from 'lodash';
 import addBillToggle from '../appContext';
 import {saveBillToCache, getNowString} from '../toolFunctions/toolFunctions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import HapticFeedbackView from './components/hapticFeedbackView'
 
 // 支出，收入按钮
 const TypeButton = props => {
   const {isTapped = false, btnText, setBillType, btnType} = props;
   return (
-    <TouchableOpacity
+    <HapticFeedbackView
       onPress={() => {
         setBillType(btnType);
       }}>
@@ -36,7 +37,7 @@ const TypeButton = props => {
           {btnText}
         </Text>
       </View>
-    </TouchableOpacity>
+    </HapticFeedbackView>
   );
 };
 // categories的卡片
@@ -54,7 +55,7 @@ const CategoryIcon = props => {
   const themeColor = randomPickArray(categoryColors);
   const setKeyboardVisibility = useContext(addBillToggle);
   return (
-    <TouchableOpacity
+    <HapticFeedbackView
       onPress={() => {
         setKeyboardVisibility(true);
         tapOpt(label);
@@ -93,7 +94,7 @@ const CategoryIcon = props => {
           </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </HapticFeedbackView>
   );
 };
 
@@ -207,14 +208,14 @@ const BillKeyboard = props => {
           ))}
         </View>
       </View>
-      <TouchableOpacity
+      <HapticFeedbackView
         onPress={() => {
           setKeyboardVisibility(false);
         }}>
         <View style={{width: '100%', height: 62, alignItems: 'center'}}>
           <KeyboardBtn label="OK" btnWidth={90} pressBtn={saveBillData} />
         </View>
-      </TouchableOpacity>
+      </HapticFeedbackView>
     </View>
   );
 };
@@ -222,7 +223,7 @@ const BillKeyboard = props => {
 const KeyboardBtn = props => {
   const {label = '1', btnWidth = 48, pressBtn = () => {}} = props;
   return (
-    <TouchableOpacity
+    <HapticFeedbackView
       onPress={() => {
         pressBtn(label, label === '<-');
       }}>
@@ -244,7 +245,7 @@ const KeyboardBtn = props => {
           {label}
         </Text>
       </View>
-    </TouchableOpacity>
+    </HapticFeedbackView>
   );
 };
 // 键盘输入框

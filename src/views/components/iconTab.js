@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import PageContext from '../../appContext';
-import {enableHapticFeedback} from '../../toolFunctions/toolFunctions';
 import HapticFeedbackView from './hapticFeedbackView';
 const IconTab = props => {
   const {text, icon, targetPage = 'TodayBill', navigation} = props;

@@ -4,6 +4,7 @@ import {View, StyleSheet, Text, Button, TouchableOpacity} from 'react-native';
 import AddButton from './addButton.js';
 import IconTab from './iconTab.js';
 import AppContext from '../../appContext.js';
+import HapticFeedbackView from './hapticFeedbackView';
 
 const styles = StyleSheet.create({
   barBasic: {
@@ -49,12 +50,12 @@ const ButtomBar = props => {
         />
       </View>
       <View style={styles.addPosition}>
-        <TouchableOpacity
+        <HapticFeedbackView
           onPress={() => {
             navi.navigate('AddBills');
           }}>
           <AddButton />
-        </TouchableOpacity>
+        </HapticFeedbackView>
       </View>
       <View style={styles.tabPosition}>
         <IconTab

@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import AppContext from '../../appContext';
+import HapticFeedbackView from './hapticFeedbackView';
 
 const cardStyles = StyleSheet.create({
   // 卡片基本样式
@@ -44,14 +45,14 @@ const cardStyles = StyleSheet.create({
 const MakeBillButton = () => {
   const navi = useContext(AppContext);
   return (
-    <TouchableOpacity
+    <HapticFeedbackView
       onPress={() => {
         navi.navigate('AddBills');
       }}>
       <View style={cardStyles.billButtonStyle}>
         <Text style={{color: '#fff', textAlign: 'center'}}>立即记账</Text>
       </View>
-    </TouchableOpacity>
+    </HapticFeedbackView>
   );
 };
 const EmptyCard = () => {
