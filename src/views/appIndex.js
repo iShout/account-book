@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useSelector, useDispatch} from 'react-redux';
+import {isHapticEnabled} from '../redux/features/haptic/hapticSlice';
 
 import ButtomBar from './components/buttomBar';
 import BillDetails from './billDetails';

@@ -11,24 +11,11 @@ import {
 } from 'react-native';
 import CustomCard from './components/customCard';
 import user from '../mock/userInfo';
-
-const commonFunctions = [
-  {
-    functionName: '预算',
-    icon: require('../images/budget.png'),
-    targetRoute: '',
-  },
-];
-const otherFunctions = [
-  {
-    functionName: '音效',
-    icon: require('../images/volume.png'),
-  },
-  {
-    functionName: '震动',
-    icon: require('../images/vibrate.png'),
-  },
-];
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  isHapticEnabled,
+  hapticToggle,
+} from '../redux/features/haptic/hapticSlice';
 
 const Title = props => {
   const {titleText} = props;
@@ -124,7 +111,7 @@ const CommonFuntion = props => {
 };
 //其它组件的ui封装
 const OtherFunctionListItem = props => {
-  const {functionName, icon} = props;
+  const {functionName, icon, functionTarget, functionToggle} = props;
   const funtionListItemStyle = StyleSheet.create({
     listContainer: {
       width: '100%',
@@ -159,13 +146,36 @@ const OtherFunctionListItem = props => {
       <Image style={funtionListItemStyle.iconStyle} source={icon} />
       <View style={funtionListItemStyle.textContainer}>
         <Text style={funtionListItemStyle.textStyle}>{functionName}</Text>
-        <Switch />
+        <Switch value={functionTarget} onChange={functionToggle} />
       </View>
     </View>
   );
 };
 
 const OptionPage = () => {
+  const HapticEnabled = useSelector(isHapticEnabled);
+  const dispatch = useDispatch();
+  const commonFunctions = [
+    {
+      functionName: '预算',
+      icon: require('../images/budget.png'),
+      targetRoute: '',
+    },
+  ];
+  const otherFunctions = [
+    {
+      functionName: '音效',
+      icon: require('../images/volume.png'),
+    },
+    {
+      functionName: '震动',
+      icon: require('../images/vibrate.png'),
+      functionTarget: HapticEnabled,
+      functionToggle: () => {
+        dispatch(hapticToggle());
+      },
+    },
+  ];
   return (
     <View style={{paddingTop: 20}}>
       <View style={{marginBottom: 28}}>

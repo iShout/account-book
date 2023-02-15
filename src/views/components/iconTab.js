@@ -1,12 +1,13 @@
 import React, {useContext} from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import PageContext from '../../appContext';
-
+import {enableHapticFeedback} from '../../toolFunctions/toolFunctions';
+import HapticFeedbackView from './hapticFeedbackView';
 const IconTab = props => {
   const {text, icon, targetPage = 'TodayBill', navigation} = props;
   const setPage = useContext(PageContext);
   return (
-    <TouchableOpacity
+    <HapticFeedbackView
       onPress={() => {
         navigation.navigate(targetPage);
       }}>
@@ -14,7 +15,7 @@ const IconTab = props => {
         <Image source={icon} style={tabStyles.iconStyle} />
         <Text style={tabStyles.textStyle}>{text}</Text>
       </View>
-    </TouchableOpacity>
+    </HapticFeedbackView>
   );
 };
 const tabStyles = StyleSheet.create({
