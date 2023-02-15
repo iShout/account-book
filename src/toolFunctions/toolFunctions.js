@@ -5,6 +5,7 @@ import analyseTimeString from './analyseTimeString';
 import getNowString from './getNowString';
 import numberToDash from './numberToDash';
 import dashToNumber from './dashToNumber';
+import enableHapticFeedback from './hapticFeedback';
 
 export {
   randomPickArray,
@@ -14,4 +15,5 @@ export {
   getNowString,
   numberToDash,
   dashToNumber,
+  enableHapticFeedback,
 };
